@@ -1,0 +1,86 @@
+import tkinter as tk
+import math
+
+class SmartCalculator:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Smart Calculator with Keypad")
+        self.root.geometry("400x500")
+        self.root.resizable(False, False)
+
+        self.expression = ""
+
+        self.entry = tk.Entry(root, font=("Arial", 18), bd=5, relief=tk.RIDGE, justify="right")
+        self.entry.pack(pady=20, fill="both", padx=10)
+
+        self.result_label = tk.Label(root, text="", font=("Arial", 16), fg="blue")
+        self.result_label.pack(pady=10)
+
+        self.create_buttons()
+
+    def create_buttons(self):
+        button_texts = [
+            ['1', '2', '3', '/', 'sqrt'],
+            ['4', '5', '6', '*', 'power'],
+            ['7', '8', '9', '-', 'clear'],
+            ['0', '.', '=', '+', 'del']
+        ]
+
+        btn_frame = tk.Frame(self.root)
+        btn_frame.pack()
+
+        for row in button_texts:
+            row_frame = tk.Frame(btn_frame)
+            row_frame.pack(expand=True, fill='both')
+            for char in row:
+                btn = tk.Button(row_frame, text=char, font=("Arial", 14), height=2, width=6,
+                                command=lambda ch=char: self.on_button_click(ch))
+                btn.pack(side='left', expand=True, fill='both')
+
+    def on_button_click(self, char):
+        if char == "clear":
+            self.expression = ""
+            self.entry.delete(0, tk.END)
+            self.result_label.config(text="")
+        elif char == "del":
+            self.expression = self.expression[:-1]
+            self.entry.delete(0, tk.END)
+            self.entry.insert(tk.END, self.expression)
+        elif char == "=":
+            self.calculate()
+        elif char == "sqrt":
+            self.expression += "sqrt "
+            self.entry.insert(tk.END, "sqrt ")
+        elif char == "power":
+            self.expression += "power "
+            self.entry.insert(tk.END, "power ")
+        else:
+            self.expression += str(char)
+            self.entry.insert(tk.END, str(char))
+
+    def calculate(self):
+        expression = self.entry.get().lower()
+
+        # Replace natural words with Python operators
+        expression = expression.replace("plus", "+")
+        expression = expression.replace("minus", "-")
+        expression = expression.replace("multiply", "*")
+        expression = expression.replace("times", "*")
+        expression = expression.replace("divide", "/")
+        expression = expression.replace("power", "**")
+        expression = expression.replace("^", "**")
+
+        try:
+            if "sqrt" in expression:
+                parts = expression.split("sqrt")
+                result = math.sqrt(float(parts[-1]))
+            else:
+                result = eval(expression)
+            self.result_label.config(text=f"= {result}")
+        except:
+            self.result_label.config(text="Invalid input!")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = SmartCalculator(root)
+    root.mainloop()

@@ -4,3 +4,8 @@
 4. run the code (python project-name.py)
 5. screen shot
    ![image](https://github.com/user-attachments/assets/db4d505b-f462-4ad4-bbfd-2ec8dcca572d)
+
+   Create Smart Calculator with keypad
+
+   ![image](https://github.com/user-attachments/assets/a7094433-f486-4fb2-b8fc-6f6ab90b0394)
+
